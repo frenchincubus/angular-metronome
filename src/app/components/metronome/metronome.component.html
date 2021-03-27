@@ -1,0 +1,35 @@
+<div class="container">
+    <h1>Metronome</h1>
+    <div class="row">
+        <div class="col-sm">
+            <div class="form-group">
+                <label for="tempo">Tempo:</label><span> {{bpm}}</span>
+                <input id="tempo" class='form-range' type="range" value="100" step="1" min='20' max='180' (input)="setTempo($event.target.value)">
+
+            </div>
+            <div>
+                <label for="metric">Metric:</label><span> {{metric}}</span>
+                <input type="range" class="form-range" name="metric" min="1" max="16" step="1" value="4" id="metric" (change)="setMetric($event.target.value)">
+            </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" (click)="setTernaire()">
+                <label class="form-check-label" for="flexSwitchCheckDefault">triplet mode</label>
+            </div>
+            <div class="form-group">
+                <label for="metroSound">Sound</label>
+                <select id="metroSound" class="form-control" #metro (change)="setSound(metro.value)">
+                    <option *ngFor="let sound of soundsList; let i" [value]="sound.index">{{sound.option}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="visType">Visualization</label>
+                <select id="visType" class="form-control" #type (change)="setVisualization(type.value)">
+                <option  *ngFor="let type of typeSelectList, let i" [value]="type.index">{{type.type}}</option>
+                </select>
+            </div>
+            <input id="metronome" class="form-control btn btn-secondary" type="button" value="{{startStopValue}}" (click)="toggle()" />
+        </div>
+        <div id='visualization' class="col-sm">
+        </div>
+    </div>
+</div>
