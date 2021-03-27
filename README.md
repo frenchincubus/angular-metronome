@@ -1,5 +1,7 @@
 # AngularMetronome
 
+This project is adapted from Dave Briccetti original project on https://github.com/dcbriccetti/metronome
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.1.4.
 
 ## Development server
