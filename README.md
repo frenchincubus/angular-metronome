@@ -1,5 +1,8 @@
 # AngularMetronome
 
+This project is adapted from Dave Briccetti original project on https://github.com/dcbriccetti/metronome
+This is version 1. The vizualiser component isn't functional yet. 
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.1.4.
 
 ## Development server
