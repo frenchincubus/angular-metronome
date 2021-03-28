@@ -1,5 +1,6 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import * as p5 from 'p5';
+import { VisSettings } from 'src/app/models/vis-settings';
 @Component({
   selector: 'app-vizualisation',
   templateUrl: './vizualisation.component.html',
@@ -7,83 +8,97 @@ import * as p5 from 'p5';
 })
 export class VizualisationComponent implements OnInit {
 
-  VisSettings;
+  // @Input() obsVisSettings: Observable<VisSettings>;
   // @ViewChild('vizu') canvas : ElementRef;
   // vis: any;
-  private p5 : p5;
+  private visSetting: VisSettings;
+  @Input() set VisSettings(value: VisSettings) {
+    this.visSetting = value;
+  }
+
+  get VisSettings() {
+    return this.visSetting;
+  }
+  p5: p5;
 
   constructor() {
-   }
+  }
 
   ngOnInit(): void {
-    this.setup();
-    // this.vis = this.canvas.nativeElement.getContext('2d');
+    console.log(this.VisSettings);
+    // this.setup();
+    this.p5 = new p5(this.sketch);
+
   }
 
-  ngOnChanges(changes): void {
-    if(changes.VisSettings) {
-      console.log(changes.VisSettings);
-      this.VisSettings = changes.VisSettings;
+  // ngOnChanges(changes: SimpleChanges): void {
+    
+  //     console.log(changes.VisSettings);
+  //     this.VisSettings = changes.VisSettings.currentValue;
+    
+  // }
+
+  sketch(p5) {
+    p5.setup = () => {
+
+      // this.vis = this.canvas.nativeElement.getContext('2d');
+      p5.createCanvas(p5.width, p5.height).parent("visualization");
+      p5.colorMode(p5.HSB);
     }
-  }
 
-  setup() {
-    this.p5 = new p5(this.draw);
-    // this.vis = this.canvas.nativeElement.getContext('2d');
-    this.p5.createCanvas(this.p5.width, this.p5.height).parent("visualization");
-    this.p5.colorMode(this.p5.HSB);
-}
-
-draw() {
-    function calcOffsetFraction() {
+    p5.draw = () => {
+      const visu = this;
+      const calcOffsetFraction = (visu) => {
         const secondsPerMinute = 60;
         const periodSeconds = secondsPerMinute / this.VisSettings.tempoBpm;
         const secondsSinceStart = this.VisSettings.getTime() - this.VisSettings.startTime;
         const offsetSeconds = secondsSinceStart % periodSeconds;
         return offsetSeconds / periodSeconds;
-    }
+      }
 
-    const offsetFraction = calcOffsetFraction();
+      const offsetFraction = calcOffsetFraction(visu);
 
-    const margin = 40;
-    const radius = this.p5.min(this.p5.width, this.p5.height) / 4;
-    const diameter = radius * 2;
+      const margin = 40;
+      const radius = p5.min(p5.width, p5.height) / 4;
+      const diameter = radius * 2;
 
-    this.p5.background(255);
+      p5.background(255);
 
-    function drawLargeCircle() {
-        this.p5.strokeWeight(10);
+      function drawLargeCircle() {
+        p5.strokeWeight(10);
         const greenHue = 120;
         const minimumBrightness = 30;
-        this.p5.fill(greenHue, 100, this.p5.map(offsetFraction, 0, 1, 100, minimumBrightness));
-        this.p5.ellipse(this.p5.width / 2, this.p5.height / 2, diameter - margin, diameter - margin);
-    }
+        p5.fill(greenHue, 100, p5.map(offsetFraction, 0, 1, 100, minimumBrightness));
+        p5.ellipse(p5.width / 2, p5.height / 2, diameter - margin, diameter - margin);
+      }
 
-    const visualizations = [
-        () => {},
+      const visualizations = [
+        () => { },
         () => {
-            function drawSpoke() {
-              this.p5.translate(this.p5.width / 2, this.p5.height / 2);
-              this.p5.rotate(this.p5.map(offsetFraction, 0, 1, 0, this.p5.TWO_PI) - this.p5.HALF_PI);
-              this.p5.strokeWeight(8);
-              this.p5.line(0, 0, radius - margin / 2, 0);
-            }
+          function drawSpoke() {
+            p5.translate(p5.width / 2, p5.height / 2);
+            p5.rotate(p5.map(offsetFraction, 0, 1, 0, p5.TWO_PI) - p5.HALF_PI);
+            p5.strokeWeight(8);
+            p5.line(0, 0, radius - margin / 2, 0);
+          }
 
-            function drawSmallCircle() {
-              this.p5.translate(radius - margin / 2, 0);
-              this.p5.strokeWeight(3);
-              this.p5.fill(255);
-              this.p5.ellipse(0, 0, 30, 30);
-            }
+          function drawSmallCircle() {
+            p5.translate(radius - margin / 2, 0);
+            p5.strokeWeight(3);
+            p5.fill(255);
+            p5.ellipse(0, 0, 30, 30);
+          }
 
-            drawLargeCircle();
-            drawSpoke();
-            drawSmallCircle();
+          drawLargeCircle();
+          drawSpoke();
+          drawSmallCircle();
         },
         () => drawLargeCircle()
-    ];
+      ];
 
-    visualizations[(this.VisSettings.visualizationType)]();
-}
+      visualizations[(this.VisSettings.visualizationType)]();
+    }
+  }
+
 
 }

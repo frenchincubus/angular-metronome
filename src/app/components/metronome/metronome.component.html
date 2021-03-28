@@ -29,7 +29,8 @@
             </div>
             <input id="metronome" class="form-control btn btn-secondary" type="button" value="{{startStopValue}}" (click)="toggle()" />
         </div>
-        <div id='visualization' class="col-sm">
-        </div>
+        <!-- <div id='visualization' class="col-sm"> -->
+        <app-vizualisation [VisSettings]="visSettings"></app-vizualisation>
+        <!-- </div> -->
     </div>
 </div>

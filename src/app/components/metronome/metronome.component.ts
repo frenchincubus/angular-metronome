@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MetronomeSound } from 'src/app/classes/metronome-sound';
+import { VisSettings } from 'src/app/models/vis-settings';
 
 @Component({
   selector: 'app-metronome',
@@ -11,7 +12,7 @@ export class MetronomeComponent implements OnInit {
   soundsPath: String = "assets/audio/";
   sounds: string[] = ['High_Woodblock.wav', 'Low_Woodblock.wav', 'High_Bongo.wav',
     'Low_Bongo.wav', 'Drumsticks.wav', 'Claves.wav'];
-  visSettings = {
+  visSettings: VisSettings = {
     tempoBpm: 0,
     startTime: 0,
     getTime: undefined,
